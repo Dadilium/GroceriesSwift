@@ -1,0 +1,14 @@
+<svg width="240" height="240" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
+  <!-- soft shadow under basket -->
+  <ellipse cx="120" cy="200" rx="80" ry="10" fill="#0E5530" opacity="0.10"/>
+  <!-- basket body -->
+  <path d="M50 100h140l-14 100H64z" fill="#FFE9D6" stroke="#E5732B" stroke-width="3" stroke-linejoin="round"/>
+  <!-- top rim -->
+  <path d="M50 100h140" stroke="#E5732B" stroke-width="3" stroke-linecap="round"/>
+  <!-- handle -->
+  <path d="M70 100c0-30 20-50 50-50s50 20 50 50" fill="none" stroke="#E5732B" stroke-width="3" stroke-linecap="round"/>
+  <!-- weave lines -->
+  <path d="M70 120h100M70 140h100M70 160h100" stroke="#E5732B" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+  <!-- floating leaf -->
+  <path d="M120 30 Q140 36 140 60 Q120 56 120 30z" fill="#1FA85A"/>
+</svg>
