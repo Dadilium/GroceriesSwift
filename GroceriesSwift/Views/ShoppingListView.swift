@@ -10,44 +10,35 @@ import SwiftUI
 struct ShoppingListView: View {
     @State private var viewModel = ShoppingListViewModel()
     
-    
-    private var header: some View {
-        HStack {
-            Text("Groceries")
-                .font(.largeTitle.weight(.bold))
-            Spacer()
-            Button {
-                
-            } label: {
-                Image(systemName: "gear")
-                    .padding(8)
-                    .font(.title)
-                    .foregroundStyle(.gray)
-                    .background(.white, in: .circle)
-                    .shadow(color: .black.opacity(0.1), radius: 5, y: 3)
-            }
-        }
-        .padding()
-    }
-    
     private var ingredientsList: some View {
         List {
-            ForEach(viewModel.items, id: \.id) { item in
-                Text(item.ingredient.name)
+            ForEach(viewModel.items) { item in
+                ShoppingListItemRow(item: item)
+                    .listRowSeparator(.hidden)
+                    .listRowBackground(Color.clear)
             }
         }
+        .listRowSpacing(-15)
+        .listStyle(.plain)
+        .scrollContentBackground(.hidden)
+        .background(.clear)
+        .scrollIndicators(.hidden)
     }
     
     var body: some View {
         VStack {
-            header
+            ShoppingListHeaderView()
             
-            if viewModel.state == .loading {
+            switch viewModel.state {
+            case .loading:
                 ProgressView()
-            }
-            
-            if viewModel.state == .ready {
+
+            case .error:
+                ProgressView()
+
+            case .ready:
                 Group {
+                    
                     if viewModel.items.isEmpty {
                         EmptyShoppingListView()
                     } else {
@@ -72,10 +63,7 @@ struct ShoppingListView: View {
                 }
             }
         }
-        .background(Color.green.opacity(0.1))
-        .toolbar {
-
-        }
+        .background(Color.green.opacity(0.1).ignoresSafeArea())
         .task { await viewModel.load() }
     }
         

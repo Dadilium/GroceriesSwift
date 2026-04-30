@@ -13,7 +13,8 @@ struct EmptyShoppingListView: View {
         VStack {
             Spacer()
             Image("basket")
-                .frame(width: 100, height: 100)
+                .resizable()
+                .frame(width: 300, height: 300)
                 .background {
                     ZStack {
                         Circle()
@@ -28,16 +29,22 @@ struct EmptyShoppingListView: View {
                             .offset(x: 50, y: 40)
                     }
                 }
-            Spacer()
-            Text("Your list is empty")
-                .font(.title2.bold())
-            Text("Tap the green plus to add what you need to buy.")
-                .font(.body)
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
-                
+                .accessibilityHidden(true)
+            
+            VStack {
+                Text("Your list is empty")
+                    .font(.title2.bold())
+                Text("Tap the green plus to add what you need to buy.")
+                    .font(.body)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
+            }
+            .padding(.top, 50)
+            
             Spacer()
         }
+        
+        
     }
 }
 

@@ -35,23 +35,23 @@ class ShoppingListViewModel {
             // load data from cache
             state = .ready
             
-//            items = [
-//                ShoppingListItem(ingredient: Ingredient(name: "Tomates"), isBought: true),
-//                ShoppingListItem(ingredient: Ingredient(name: "Laitue"), isBought: false),
-//                ShoppingListItem(ingredient: Ingredient(name: "Pommes"), isBought: false),
-//                ShoppingListItem(ingredient: Ingredient(name: "Tomates"), isBought: true),
-//                ShoppingListItem(ingredient: Ingredient(name: "Laitue"), isBought: false),
-//                ShoppingListItem(ingredient: Ingredient(name: "Pommes"), isBought: false),
-//                ShoppingListItem(ingredient: Ingredient(name: "Tomates"), isBought: true),
-//                ShoppingListItem(ingredient: Ingredient(name: "Laitue"), isBought: false),
-//                ShoppingListItem(ingredient: Ingredient(name: "Pommes"), isBought: false),
-//                ShoppingListItem(ingredient: Ingredient(name: "Tomates"), isBought: true),
-//                ShoppingListItem(ingredient: Ingredient(name: "Laitue"), isBought: false),
-//                ShoppingListItem(ingredient: Ingredient(name: "Pommes"), isBought: false),
-//                ShoppingListItem(ingredient: Ingredient(name: "Tomates"), isBought: true),
-//                ShoppingListItem(ingredient: Ingredient(name: "Laitue"), isBought: false),
-//                ShoppingListItem(ingredient: Ingredient(name: "Pommes"), isBought: false),
-//            ]
+            items = [
+                ShoppingListItem(ingredient: Ingredient(name: "Tomates"), isBought: true),
+                ShoppingListItem(ingredient: Ingredient(name: "Laitue"), isBought: false),
+                ShoppingListItem(ingredient: Ingredient(name: "Pommes"), isBought: false),
+                ShoppingListItem(ingredient: Ingredient(name: "Tomates"), isBought: true),
+                ShoppingListItem(ingredient: Ingredient(name: "Laitue"), isBought: false),
+                ShoppingListItem(ingredient: Ingredient(name: "Pommes"), isBought: false),
+                ShoppingListItem(ingredient: Ingredient(name: "Tomates"), isBought: true),
+                ShoppingListItem(ingredient: Ingredient(name: "Laitue"), isBought: false),
+                ShoppingListItem(ingredient: Ingredient(name: "Pommes"), isBought: false),
+                ShoppingListItem(ingredient: Ingredient(name: "Tomates"), isBought: true),
+                ShoppingListItem(ingredient: Ingredient(name: "Laitue"), isBought: false),
+                ShoppingListItem(ingredient: Ingredient(name: "Pommes"), isBought: false),
+                ShoppingListItem(ingredient: Ingredient(name: "Tomates"), isBought: true),
+                ShoppingListItem(ingredient: Ingredient(name: "Laitue"), isBought: false),
+                ShoppingListItem(ingredient: Ingredient(name: "Pommes"), isBought: false),
+            ]
         } catch {
             state = .error
         }
