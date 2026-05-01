@@ -29,29 +29,21 @@ class ShoppingListViewModel {
     var state: ShoppingListState = .loading
     var items: [ShoppingListItem] = []
     
+    func addItem(ingredientName: String) {
+        items.append(ShoppingListItem(ingredient: Ingredient(name: ingredientName), isBought: true))
+    }
+    
     func load() async {
         do {
             try await Task.sleep(nanoseconds: 1000)
             // load data from cache
             state = .ready
             
-            items = [
-                ShoppingListItem(ingredient: Ingredient(name: "Tomates"), isBought: true),
-                ShoppingListItem(ingredient: Ingredient(name: "Laitue"), isBought: false),
-                ShoppingListItem(ingredient: Ingredient(name: "Pommes"), isBought: false),
-                ShoppingListItem(ingredient: Ingredient(name: "Tomates"), isBought: true),
-                ShoppingListItem(ingredient: Ingredient(name: "Laitue"), isBought: false),
-                ShoppingListItem(ingredient: Ingredient(name: "Pommes"), isBought: false),
-                ShoppingListItem(ingredient: Ingredient(name: "Tomates"), isBought: true),
-                ShoppingListItem(ingredient: Ingredient(name: "Laitue"), isBought: false),
-                ShoppingListItem(ingredient: Ingredient(name: "Pommes"), isBought: false),
-                ShoppingListItem(ingredient: Ingredient(name: "Tomates"), isBought: true),
-                ShoppingListItem(ingredient: Ingredient(name: "Laitue"), isBought: false),
-                ShoppingListItem(ingredient: Ingredient(name: "Pommes"), isBought: false),
-                ShoppingListItem(ingredient: Ingredient(name: "Tomates"), isBought: true),
-                ShoppingListItem(ingredient: Ingredient(name: "Laitue"), isBought: false),
-                ShoppingListItem(ingredient: Ingredient(name: "Pommes"), isBought: false),
-            ]
+//            items = [
+//                ShoppingListItem(ingredient: Ingredient(name: "Tomates"), isBought: true),
+//                ShoppingListItem(ingredient: Ingredient(name: "Laitue"), isBought: false),
+//                ShoppingListItem(ingredient: Ingredient(name: "Pommes"), isBought: false),
+//            ]
         } catch {
             state = .error
         }

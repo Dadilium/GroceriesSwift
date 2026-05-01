@@ -9,7 +9,8 @@ import SwiftUI
 
 struct ShoppingListView: View {
     @State private var viewModel = ShoppingListViewModel()
-    
+    @State private var showingSheet = false
+
     private var ingredientsList: some View {
         List {
             ForEach(viewModel.items) { item in
@@ -47,7 +48,7 @@ struct ShoppingListView: View {
                 }
                 .overlay(alignment: .bottomTrailing) {
                     Button {
-                        
+                        showingSheet.toggle()
                     } label: {
                         Image(systemName: "plus")
                             .padding()
@@ -60,6 +61,10 @@ struct ShoppingListView: View {
                     .accessibilityLabel("Add item")
                     .padding(.trailing ,32)
                     .padding(.bottom, 16)
+                    .sheet(isPresented: $showingSheet) {
+                        AddNewShoppingItemView(addItemFct: viewModel.addItem)
+                            .presentationDetents([.medium])
+                    }
                 }
             }
         }
