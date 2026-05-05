@@ -2,22 +2,43 @@
 //  ShoppingListView.swift
 //  GroceriesSwift
 //
-//  Created by Antoine ROY on 28/04/2026.
+//  Created by Antoine ROY on 05/05/2026.
 //
 
 import SwiftUI
 
 struct ShoppingListView: View {
-    @State private var viewModel = ShoppingListViewModel()
-    @State private var showingSheet = false
-
-    private var ingredientsList: some View {
+    var toBuyItems: [ShoppingListItem]
+    var inBasketItems: [ShoppingListItem]
+    var setItemAsBought: (UUID) -> Void
+    
+    var body: some View {
         List {
-            ForEach(viewModel.items) { item in
-                ShoppingListItemRow(item: item)
-                    .listRowSeparator(.hidden)
-                    .listRowBackground(Color.clear)
+            if toBuyItems.count > 0 {
+                Section {
+                    ForEach(toBuyItems) { item in
+                        ShoppingListItemRowView(item: item, onItemPressed: setItemAsBought)
+                            .listRowSeparator(.hidden)
+                            .listRowBackground(Color.clear)
+                    }
+                } header: {
+                    Text("To Buy")
+                }
             }
+            
+            if inBasketItems.count > 0 {
+                Section {
+                    ForEach(inBasketItems) { item in
+                        ShoppingListItemRowView(item: item, onItemPressed: setItemAsBought)
+                            .listRowSeparator(.hidden)
+                            .listRowBackground(Color.clear)
+                    }
+                } header: {
+                    Text("In basket")
+                }
+            }
+            
+            
         }
         .listRowSpacing(-15)
         .listStyle(.plain)
@@ -25,57 +46,8 @@ struct ShoppingListView: View {
         .background(.clear)
         .scrollIndicators(.hidden)
     }
-    
-    var body: some View {
-        VStack {
-            ShoppingListHeaderView()
-            
-            switch viewModel.state {
-            case .loading:
-                ProgressView()
-
-            case .error:
-                ProgressView()
-
-            case .ready:
-                Group {
-                    
-                    if viewModel.items.isEmpty {
-                        EmptyShoppingListView()
-                    } else {
-                        ingredientsList
-                    }
-                }
-                .overlay(alignment: .bottomTrailing) {
-                    Button {
-                        showingSheet.toggle()
-                    } label: {
-                        Image(systemName: "plus")
-                            .padding()
-                            .frame(width: 80, height: 80)
-                            .font(.largeTitle.weight(.semibold))
-                            .foregroundStyle(.white)
-                            .background(.green, in: .circle)
-                            .shadow(color: .black.opacity(0.1), radius: 5, y: 3)
-                    }
-                    .accessibilityLabel("Add item")
-                    .padding(.trailing ,32)
-                    .padding(.bottom, 16)
-                    .sheet(isPresented: $showingSheet) {
-                        AddNewShoppingItemView(addItemFct: viewModel.addItem)
-                            .presentationDetents([.medium])
-                    }
-                }
-            }
-        }
-        .background(Color.green.opacity(0.1).ignoresSafeArea())
-        .task { await viewModel.load() }
-    }
-        
 }
 
 #Preview {
-    NavigationStack {
-        ShoppingListView()
-    }
+    ShoppingListView(toBuyItems: [], inBasketItems: [], setItemAsBought: {_ in })
 }

@@ -12,7 +12,7 @@ struct GroceriesSwiftApp: App {
     var body: some Scene {
         WindowGroup {
             NavigationStack {
-                ShoppingListView()
+                ShoppingListScreen()
             }
         }
     }
