@@ -10,8 +10,9 @@ import SwiftUI
 struct ShoppingListItemRowView: View {
     var item: ShoppingListItem
     var onItemPressed: (UUID) -> Void
+    var onItemDeleted: (UUID) -> Void
 
-    var body: some View {
+    private var layout: some View {
         HStack {
             Button {
                 onItemPressed(item.id)
@@ -38,6 +39,10 @@ struct ShoppingListItemRowView: View {
             
             Spacer()
         }
+    }
+    
+    var body: some View {
+        layout
         .padding()
         .background(item.isBought ? .brown.opacity(0.2) : .white)
         .clipShape(RoundedRectangle(cornerRadius: 30))
@@ -45,14 +50,30 @@ struct ShoppingListItemRowView: View {
             RoundedRectangle(cornerRadius: 30)
                 .stroke(.gray, lineWidth: 1)
         }
+        .swipeActions() {
+            Button(role: .confirm) {
+                onItemPressed(item.id)
+            } label: {
+                Image(systemName: "checkmark")
+                    .symbolEffect(.drawOn)
+            }
+        }
+        .swipeActions() {
+            Button(role: .destructive) {
+                onItemDeleted(item.id)
+            } label: {
+                Image(systemName: "xmark.bin.fill")
+                    .symbolEffect(.drawOn)
+            }
+        }
         
     }
 }
 
 #Preview {
     Group {
-        ShoppingListItemRowView(item: ShoppingListItem(ingredient: Ingredient(name: "mon cucumber"), isBought: false), onItemPressed: { _ in })
-        ShoppingListItemRowView(item: ShoppingListItem(ingredient: Ingredient(name: "My tomate"), isBought: true), onItemPressed: { _ in })
+        ShoppingListItemRowView(item: ShoppingListItem(ingredient: Ingredient(name: "mon cucumber"), isBought: false), onItemPressed: { _ in }, onItemDeleted: { _ in })
+        ShoppingListItemRowView(item: ShoppingListItem(ingredient: Ingredient(name: "My tomate"), isBought: true), onItemPressed: { _ in }, onItemDeleted: { _ in })
+        
     }
-
 }

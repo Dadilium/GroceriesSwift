@@ -29,11 +29,13 @@ class ShoppingListViewModel {
     var state: ShoppingListState = .loading
     var items: [ShoppingListItem] = []
     
+    private(set) var pendingBoughtIds: Set<UUID> = []
+
     var toBuyItems: [ShoppingListItem] {
-        items.filter({ !$0.isBought })
+        items.filter { !$0.isBought || pendingBoughtIds.contains($0.id) }
     }
     var inBasketItems: [ShoppingListItem] {
-        items.filter({ $0.isBought })
+        items.filter { $0.isBought && !pendingBoughtIds.contains($0.id) }
     }
     
     func addItem(ingredientName: String) {
@@ -42,10 +44,14 @@ class ShoppingListViewModel {
     }
     
     func setItemAsBought(id: UUID) {
+        guard let index = items.firstIndex(where: { $0.id == id }) else { return }
+
+        items[index].isBought.toggle()
+    }
+
+    func deleteItem(id: UUID) {
         withAnimation {
-            if let index = items.firstIndex(where: { $0.id == id }) {
-                items[index].isBought.toggle()
-            }
+            items.removeAll { $0.id == id }
         }
     }
     
