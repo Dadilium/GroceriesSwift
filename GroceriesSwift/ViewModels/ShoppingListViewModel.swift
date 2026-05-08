@@ -6,16 +6,7 @@
 //
 
 import SwiftUI
-
-struct Ingredient: Equatable {
-    var name: String
-}
-
-struct ShoppingListItem: Equatable, Identifiable {
-    var id: UUID = UUID()
-    var ingredient: Ingredient
-    var isBought: Bool
-}
+import SwiftData
 
 enum ShoppingListState: Equatable {
     case loading
@@ -29,45 +20,51 @@ class ShoppingListViewModel {
     var state: ShoppingListState = .loading
     var items: [ShoppingListItem] = []
     
-    private(set) var pendingBoughtIds: Set<UUID> = []
-
+    private var modelContext: ModelContext?
+    
     var toBuyItems: [ShoppingListItem] {
-        items.filter { !$0.isBought || pendingBoughtIds.contains($0.id) }
+        items.filter { !$0.isBought }
     }
     var inBasketItems: [ShoppingListItem] {
-        items.filter { $0.isBought && !pendingBoughtIds.contains($0.id) }
+        items.filter { $0.isBought }
     }
     
     func addItem(ingredientName: String) {
-        items.append(ShoppingListItem(ingredient: Ingredient(name: ingredientName), isBought: false))
-        items.sort(by: { $0.ingredient.name.localizedCaseInsensitiveCompare($1.ingredient.name) == .orderedAscending })
+        guard let modelContext else { return }
+        let itemToCreate = ShoppingListItem(ingredient: ingredientName)
+        
+        modelContext.insert(itemToCreate)
+        items.append(itemToCreate)
+        items.sort(by: { $0.ingredient.localizedCaseInsensitiveCompare($1.ingredient) == .orderedAscending })
+        save()
     }
     
     func setItemAsBought(id: UUID) {
         guard let index = items.firstIndex(where: { $0.id == id }) else { return }
-
         items[index].isBought.toggle()
+        save()
     }
 
     func deleteItem(id: UUID) {
+        guard let modelContext, let item = items.first(where: { $0.id == id }) else { return }
         withAnimation {
+            modelContext.delete(item)
             items.removeAll { $0.id == id }
         }
+        save()
     }
     
-    func load() async {
-        do {
-            try await Task.sleep(nanoseconds: 1000)
-            // load data from cache
-            state = .ready
-            
-            items = [
-                ShoppingListItem(ingredient: Ingredient(name: "Tomates"), isBought: true),
-                ShoppingListItem(ingredient: Ingredient(name: "Laitue"), isBought: false),
-                ShoppingListItem(ingredient: Ingredient(name: "Pommes"), isBought: false),
-            ]
-        } catch {
-            state = .error
-        }
+    func load(context: ModelContext) async {
+        self.modelContext = context
+        let descriptor = FetchDescriptor<ShoppingListItem>(
+            sortBy: [SortDescriptor(\.ingredient)]
+        )
+        
+        self.items = (try? context.fetch(descriptor)) ?? []
+        state = .ready
+    }
+    
+    private func save() {
+        try? modelContext?.save()
     }
 }

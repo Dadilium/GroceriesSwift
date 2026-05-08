@@ -32,7 +32,7 @@ struct ShoppingListItemRowView: View {
             }
             .padding(4)
             
-            Text(item.ingredient.name)
+            Text(item.ingredient)
                 .foregroundStyle(item.isBought ? .gray : .primary)
                 .font(.title2.weight(.medium))
                 .strikethrough(item.isBought)
@@ -72,8 +72,8 @@ struct ShoppingListItemRowView: View {
 
 #Preview {
     Group {
-        ShoppingListItemRowView(item: ShoppingListItem(ingredient: Ingredient(name: "mon cucumber"), isBought: false), onItemPressed: { _ in }, onItemDeleted: { _ in })
-        ShoppingListItemRowView(item: ShoppingListItem(ingredient: Ingredient(name: "My tomate"), isBought: true), onItemPressed: { _ in }, onItemDeleted: { _ in })
+        ShoppingListItemRowView(item: ShoppingListItem(ingredient: "mon cucumber", isBought: false), onItemPressed: { _ in }, onItemDeleted: { _ in })
+        ShoppingListItemRowView(item: ShoppingListItem(ingredient: "My tomate", isBought: true), onItemPressed: { _ in }, onItemDeleted: { _ in })
         
     }
 }

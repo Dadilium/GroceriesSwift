@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct GroceriesSwiftApp: App {
@@ -15,5 +16,6 @@ struct GroceriesSwiftApp: App {
                 ShoppingListScreen()
             }
         }
+        .modelContainer(for: ShoppingListItem.self)
     }
 }

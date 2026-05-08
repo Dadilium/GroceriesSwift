@@ -6,11 +6,14 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ShoppingListScreen: View {
+    @Environment(\.modelContext) private var modelContext
+
     @State private var viewModel = ShoppingListViewModel()
     @State private var showingSheet = false
-    
+
     private var addNewItemButton: some View {
         Button {
             showingSheet.toggle()
@@ -80,7 +83,7 @@ struct ShoppingListScreen: View {
             }
         }
         .background(Color.green.opacity(0.1).ignoresSafeArea())
-        .task { await viewModel.load() }
+        .task { await viewModel.load(context: modelContext) }
     }
         
 }
@@ -88,5 +91,6 @@ struct ShoppingListScreen: View {
 #Preview {
     NavigationStack {
         ShoppingListScreen()
+            .modelContainer(for: ShoppingListItem.self)
     }
 }
