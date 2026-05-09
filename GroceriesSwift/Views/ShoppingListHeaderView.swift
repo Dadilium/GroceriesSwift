@@ -26,12 +26,11 @@ struct ShoppingListHeaderView: View {
                     }
                 }
                 .foregroundStyle(Color(.secondaryLabel))
-//                .padding(.leading)
             }
 
             Spacer()
-            Button {
-                
+            NavigationLink {
+                SettingsScreen()
             } label: {
                 Image(systemName: "gearshape")
                     .symbolEffect(.bounce.up.wholeSymbol, options: .nonRepeating)
