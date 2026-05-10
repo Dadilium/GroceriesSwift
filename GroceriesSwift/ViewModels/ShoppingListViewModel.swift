@@ -54,6 +54,14 @@ class ShoppingListViewModel {
         save()
     }
     
+    func clearAll() {
+        guard let modelContext else { return }
+
+        items.forEach({ item in modelContext.delete(item) })
+        items.removeAll()
+        save()
+    }
+    
     func load(context: ModelContext) async {
         self.modelContext = context
         let descriptor = FetchDescriptor<ShoppingListItem>(

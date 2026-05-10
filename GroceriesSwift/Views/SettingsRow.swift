@@ -14,13 +14,11 @@ enum SettingsRowState {
 }
 
 struct SettingsRow: View {
-
-    
     var title: String
     var subtitle: String?
     var icon: String
     var state: SettingsRowState
-    
+    var action: (() -> Void)?
     
     private var iconBackground: Color {
         switch state {
@@ -43,8 +41,8 @@ struct SettingsRow: View {
             return .red
         }
     }
-
-    var body: some View {
+    
+    private var render: some View {
         HStack(alignment: .center) {
             Image(systemName: icon)
                 .resizable()
@@ -68,12 +66,28 @@ struct SettingsRow: View {
             }
         }
     }
+
+    var body: some View {
+        if action != nil {
+            Button {
+                action?()
+            } label: {
+                render
+                    .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+        } else {
+            render
+        }
+    }
 }
 
 #Preview {
     List {
         SettingsRow(title: "Items in basket", subtitle: "2 of 5", icon: "clock", state: .base)
-        SettingsRow(title: "Clear basket", icon: "checkmark", state: .complete)
+        SettingsRow(title: "Clear basket", icon: "checkmark", state: .complete) {
+            print("Yolo")
+        }
         SettingsRow(title: "Delete all items", icon: "trash", state: .delete)
         SettingsRow(title: "Groceries", subtitle: "v1.0", icon: "gear", state: .base)
 

@@ -13,6 +13,7 @@ struct ShoppingListScreen: View {
 
     @State private var viewModel = ShoppingListViewModel()
     @State private var showingSheet = false
+    @State private var showingSettings = false
 
     private var addNewItemButton: some View {
         Button {
@@ -60,7 +61,11 @@ struct ShoppingListScreen: View {
     
     var body: some View {
         VStack {
-            ShoppingListHeaderView(totalCount: viewModel.items.count, boughtCount: viewModel.inBasketItems.count)
+            ShoppingListHeaderView(totalCount: viewModel.items.count, boughtCount: viewModel.inBasketItems.count, onSettingsPressed: { showingSettings = true }
+            )
+            .navigationDestination(isPresented: $showingSettings) {
+                SettingsScreen(viewModel: viewModel)
+            }
             
             switch viewModel.state {
             case .loading:

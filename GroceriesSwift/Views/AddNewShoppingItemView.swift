@@ -43,20 +43,21 @@ struct AddNewShoppingItemView: View {
     }
     
     private var addButton: some View {
-        Button("Add") {
-            print("added")
-            addItemFct(itemName)
-            dismiss()
-        }
-        .frame(maxWidth: .infinity)
-        .padding()
-        .background(.green, in: RoundedRectangle(cornerRadius: 16))
-        .contentShape(RoundedRectangle(cornerRadius: 16))
-        .foregroundStyle(.white)
-        .font(.headline)
-        .disabled(itemName.isEmpty)
-        .padding(.top)
-        .shadow(radius: 10, y: 3)
+        Button {
+                addItemFct(itemName)
+                dismiss()
+            } label: {
+                Text("Add")
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(itemName.isEmpty ? .gray : .green, in: RoundedRectangle(cornerRadius: 16))
+                    .foregroundStyle(.white)
+                    .font(.headline)
+                    .contentShape(RoundedRectangle(cornerRadius: 16))
+            }
+            .disabled(itemName.isEmpty)
+            .padding(.top)
+            .shadow(radius: 10, y: 3)
     }
     
     var body: some View {

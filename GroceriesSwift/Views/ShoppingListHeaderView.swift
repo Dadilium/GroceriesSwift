@@ -10,7 +10,8 @@ import SwiftUI
 struct ShoppingListHeaderView: View {
     var totalCount: Int
     var boughtCount: Int
-    
+    var onSettingsPressed: () -> Void
+
     var body: some View {
         HStack {
             VStack(alignment: .leading) {
@@ -29,8 +30,8 @@ struct ShoppingListHeaderView: View {
             }
 
             Spacer()
-            NavigationLink {
-                SettingsScreen()
+            Button {
+                onSettingsPressed()
             } label: {
                 Image(systemName: "gearshape")
                     .symbolEffect(.bounce.up.wholeSymbol, options: .nonRepeating)
@@ -49,6 +50,6 @@ struct ShoppingListHeaderView: View {
 }
 
 #Preview {
-    ShoppingListHeaderView(totalCount: 10, boughtCount: 5)
-    ShoppingListHeaderView(totalCount: 10, boughtCount: 0)
+    ShoppingListHeaderView(totalCount: 10, boughtCount: 5, onSettingsPressed: {})
+    ShoppingListHeaderView(totalCount: 10, boughtCount: 0, onSettingsPressed: {})
 }
