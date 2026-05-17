@@ -20,15 +20,14 @@ struct ShoppingListScreen: View {
             showingSheet.toggle()
         } label: {
             Image(systemName: "plus")
+                .resizable()
                 .padding()
-                .frame(width: 80, height: 80)
-                .font(.largeTitle.weight(.semibold))
+                .frame(width: 70, height: 70)
                 .foregroundStyle(.white)
                 .background(.green, in: .circle)
                 .shadow(color: .black.opacity(0.1), radius: 5, y: 3)
         }
         .accessibilityLabel("Add item")
-        .padding(.trailing ,32)
         .padding(.bottom, 16)
         .sheet(isPresented: $showingSheet) {
             AddNewShoppingItemView(addItemFct: viewModel.addItem)
