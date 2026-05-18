@@ -6,8 +6,12 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct CollectionListScreen: View {
+    @Environment(\.modelContext) private var modelContext
+    
+    private var viewModel = CollectionListViewModel()
     
     var header: some View {
         HStack {
@@ -24,7 +28,7 @@ struct CollectionListScreen: View {
     }
     
     var newCollectionButton: some View {
-        Button(action: {}) {
+        Button(action: { viewModel.createNewCollection(with: "toto")}) {
             HStack {
                 Image(systemName: "plus")
                 Text("New Collection")
@@ -47,7 +51,17 @@ struct CollectionListScreen: View {
         VStack {
             header
             newCollectionButton
+            
+            ForEach(viewModel.collections) { item in
+                CollectionListItem(collection: item)
+            }
+            .padding(.horizontal)
+            .padding(.vertical, 4)
+            
             Spacer()
+        }
+        .task {
+            await viewModel.load(context: modelContext)
         }
     }
 }

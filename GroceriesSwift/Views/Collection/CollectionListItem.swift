@@ -8,14 +8,7 @@
 import SwiftUI
 
 struct CollectionListItem: View {
-    private var itemCount = 5
-    private var items: [ShoppingItem] = [
-        ShoppingItem(ingredient: "Milk", isBought: false),
-        ShoppingItem(ingredient: "Tomatoes", isBought: false),
-        ShoppingItem(ingredient: "eggs", isBought: false),
-        ShoppingItem(ingredient: "funny", isBought: false),
-        ShoppingItem(ingredient: "caramel", isBought: false),
-    ]
+    var collection: CollectionItem
     
     func itemTag(item: ShoppingItem) -> some View {
         Text(item.ingredient.capitalized)
@@ -35,16 +28,16 @@ struct CollectionListItem: View {
             Text("Title")
                 .font(.title2.weight(.semibold))
             
-            Text("\(itemCount) items")
+            Text("\(collection.shoppingItems.count) items")
             
             HStack {
-                ForEach(items[0..<5], id: \.ingredient) { i in
+                ForEach(collection.shoppingItems[0..<4], id: \.ingredient) { i in
                     itemTag(item: i)
                 }
                 Spacer()
             }
             
-            Text("+ \(itemCount) more")
+            Text("+ \(collection.shoppingItems.count) more")
                 .foregroundStyle(.secondary)
         }
         .padding()
@@ -67,5 +60,10 @@ struct CollectionListItem: View {
 }
 
 #Preview {
-    CollectionListItem()
+    CollectionListItem(collection: CollectionItem(title: "Super List", shoppingItems: [
+        ShoppingItem(ingredient: "Milk"),
+        ShoppingItem(ingredient: "Tomatoes"),
+        ShoppingItem(ingredient: "butter"),
+        ShoppingItem(ingredient: "Dragon fruit"),
+    ]))
 }
