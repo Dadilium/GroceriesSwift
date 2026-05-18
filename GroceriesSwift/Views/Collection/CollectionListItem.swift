@@ -9,16 +9,16 @@ import SwiftUI
 
 struct CollectionListItem: View {
     private var itemCount = 5
-    private var items: [ShoppingListItem] = [
-        ShoppingListItem(ingredient: "Milk", isBought: false),
-        ShoppingListItem(ingredient: "Tomatoes", isBought: false),
-        ShoppingListItem(ingredient: "eggs", isBought: false),
-        ShoppingListItem(ingredient: "funny", isBought: false),
-        ShoppingListItem(ingredient: "caramel", isBought: false),
+    private var items: [ShoppingItem] = [
+        ShoppingItem(ingredient: "Milk", isBought: false),
+        ShoppingItem(ingredient: "Tomatoes", isBought: false),
+        ShoppingItem(ingredient: "eggs", isBought: false),
+        ShoppingItem(ingredient: "funny", isBought: false),
+        ShoppingItem(ingredient: "caramel", isBought: false),
     ]
     
-    func itemTag(item: ShoppingListItem) -> some View {
-        Text(item.ingredient)
+    func itemTag(item: ShoppingItem) -> some View {
+        Text(item.ingredient.capitalized)
             .font(.footnote)
             .foregroundStyle(.green)
             .padding(8)
@@ -26,7 +26,7 @@ struct CollectionListItem: View {
             .cornerRadius(10)
             .overlay() {
                 RoundedRectangle(cornerRadius: 10)
-                    .stroke()
+                    .stroke(.gray.opacity(0.2))
             }
     }
     
@@ -38,18 +38,30 @@ struct CollectionListItem: View {
             Text("\(itemCount) items")
             
             HStack {
-                ForEach(items, id: \.ingredient) { i in
+                ForEach(items[0..<5], id: \.ingredient) { i in
                     itemTag(item: i)
                 }
+                Spacer()
             }
             
             Text("+ \(itemCount) more")
                 .foregroundStyle(.secondary)
-
         }
         .padding()
+        .padding(.vertical)
         .frame(width: .infinity)
         .background(.white, in: RoundedRectangle(cornerRadius: 16))
+        .overlay(alignment: .topTrailing) {
+            Image(systemName: "chevron.right")
+                .resizable()
+                .frame(width: 10, height: 15)
+                .foregroundStyle(.gray)
+                .padding(40)
+                .background(.red.opacity(0.2), in: Circle())
+                .padding(.trailing, -16)
+                .padding(.top, -16)
+        }
+        .clipShape(RoundedRectangle(cornerRadius: 16))
         .shadow(radius: 10, y: 3)
     }
 }

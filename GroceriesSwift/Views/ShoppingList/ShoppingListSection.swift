@@ -9,12 +9,12 @@ import SwiftUI
 
 
 struct ShoppingListSection<Header: View>: View {
-    var items: [ShoppingListItem]
+    var items: [ShoppingItem]
     var setItemAsBought: (UUID) -> Void
     var deleteItem: (UUID) -> Void
     var header: Header
 
-    init(items: [ShoppingListItem], setItemAsBought: @escaping (UUID) -> Void, deleteItem: @escaping (UUID) -> Void, @ViewBuilder header: () -> Header) {
+    init(items: [ShoppingItem], setItemAsBought: @escaping (UUID) -> Void, deleteItem: @escaping (UUID) -> Void, @ViewBuilder header: () -> Header) {
         self.items = items
         self.setItemAsBought = setItemAsBought
         self.deleteItem = deleteItem

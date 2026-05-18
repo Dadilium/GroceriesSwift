@@ -95,6 +95,6 @@ struct ShoppingListScreen: View {
 #Preview {
     NavigationStack {
         ShoppingListScreen()
-            .modelContainer(for: ShoppingListItem.self)
+            .modelContainer(for: ShoppingItem.self)
     }
 }

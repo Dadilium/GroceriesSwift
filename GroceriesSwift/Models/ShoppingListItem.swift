@@ -9,7 +9,7 @@ import SwiftData
 import Foundation
 
 @Model
-class ShoppingListItem {
+class ShoppingItem {
     var id: UUID
     var ingredient: String
     var isBought: Bool

@@ -14,6 +14,6 @@ struct GroceriesSwiftApp: App {
         WindowGroup {
             ContentView()
         }
-        .modelContainer(for: ShoppingListItem.self)
+        .modelContainer(for: ShoppingItem.self)
     }
 }

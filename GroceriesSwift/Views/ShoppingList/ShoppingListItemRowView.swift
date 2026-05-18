@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ShoppingListItemRowView: View {
-    var item: ShoppingListItem
+    var item: ShoppingItem
     var onItemPressed: (UUID) -> Void
     var onItemDeleted: (UUID) -> Void
 
@@ -72,8 +72,8 @@ struct ShoppingListItemRowView: View {
 
 #Preview {
     Group {
-        ShoppingListItemRowView(item: ShoppingListItem(ingredient: "mon cucumber", isBought: false), onItemPressed: { _ in }, onItemDeleted: { _ in })
-        ShoppingListItemRowView(item: ShoppingListItem(ingredient: "My tomate", isBought: true), onItemPressed: { _ in }, onItemDeleted: { _ in })
+        ShoppingListItemRowView(item: ShoppingItem(ingredient: "mon cucumber", isBought: false), onItemPressed: { _ in }, onItemDeleted: { _ in })
+        ShoppingListItemRowView(item: ShoppingItem(ingredient: "My tomate", isBought: true), onItemPressed: { _ in }, onItemDeleted: { _ in })
         
     }
 }

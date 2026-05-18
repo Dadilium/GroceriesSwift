@@ -18,20 +18,20 @@ enum ShoppingListState: Equatable {
 @MainActor
 class ShoppingListViewModel {
     var state: ShoppingListState = .loading
-    var items: [ShoppingListItem] = []
+    var items: [ShoppingItem] = []
     
     private var modelContext: ModelContext?
     
-    var toBuyItems: [ShoppingListItem] {
+    var toBuyItems: [ShoppingItem] {
         items.filter { !$0.isBought }
     }
-    var inBasketItems: [ShoppingListItem] {
+    var inBasketItems: [ShoppingItem] {
         items.filter { $0.isBought }
     }
     
     func addItem(ingredientName: String) {
         guard let modelContext else { return }
-        let itemToCreate = ShoppingListItem(ingredient: ingredientName)
+        let itemToCreate = ShoppingItem(ingredient: ingredientName)
         
         modelContext.insert(itemToCreate)
         items.append(itemToCreate)
@@ -64,7 +64,7 @@ class ShoppingListViewModel {
     
     func load(context: ModelContext) async {
         self.modelContext = context
-        let descriptor = FetchDescriptor<ShoppingListItem>(
+        let descriptor = FetchDescriptor<ShoppingItem>(
             sortBy: [SortDescriptor(\.ingredient)]
         )
         
