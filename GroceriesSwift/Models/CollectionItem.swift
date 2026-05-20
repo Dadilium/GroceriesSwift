@@ -20,6 +20,10 @@ class CollectionItem {
         return Array(shoppingItems.prefix(end))
     }
     
+    func rename(to newTitle: String) {
+        title = newTitle
+    }
+    
     init(title: String, shoppingItems: [ShoppingItem], createdAt: Date? = nil) {
         self.id = UUID()
         self.title = title

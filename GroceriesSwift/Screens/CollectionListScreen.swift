@@ -8,10 +8,14 @@
 import SwiftUI
 import SwiftData
 
+struct CollectionRoute: Identifiable, Hashable { let id: UUID }
+
+
 struct CollectionListScreen: View {
     @Environment(\.modelContext) private var modelContext
     
-    private var viewModel = CollectionListViewModel()
+    @State private var collectionRoute: CollectionRoute? = nil
+    @State private var viewModel = CollectionListViewModel()
     
     var header: some View {
         HStack {
@@ -28,7 +32,11 @@ struct CollectionListScreen: View {
     }
     
     var newCollectionButton: some View {
-        Button(action: { viewModel.createNewCollection(with: "toto")}) {
+        Button(action: {
+            let newCollection = viewModel.createNewCollection(named: "Tap here to rename!")
+            
+            collectionRoute = CollectionRoute(id: newCollection.id)
+        }) {
             HStack {
                 Image(systemName: "plus")
                 Text("New Collection")
@@ -52,16 +60,22 @@ struct CollectionListScreen: View {
             header
             newCollectionButton
             
-            ForEach(viewModel.collections) { item in
-                CollectionListItem(collection: item)
+            ScrollView {
+                ForEach(viewModel.collections) { item in
+                    CollectionListItem(collection: item)
+                }
             }
             .padding(.horizontal)
             .padding(.vertical, 4)
             
             Spacer()
         }
+        .background(Color.green.opacity(0.1).ignoresSafeArea())
         .task {
             await viewModel.load(context: modelContext)
+        }
+        .navigationDestination(item: $collectionRoute) { route in
+            CollectionDetailsScreen(collectionId: route.id)
         }
     }
 }

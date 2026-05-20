@@ -9,17 +9,19 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        NavigationStack {
-            TabView {
+        TabView {
+            NavigationStack {
                 ShoppingListScreen()
-                    .tabItem {
-                        Label("Shopping", systemImage: "cart")
-                    }
-                
+            }
+            .tabItem {
+                Label("Shopping", systemImage: "cart")
+            }
+            
+            NavigationStack {
                 CollectionListScreen()
-                    .tabItem {
-                        Label("Collections", systemImage: "menucard")
-                    }
+            }
+            .tabItem {
+                Label("Collections", systemImage: "menucard")
             }
         }
     }

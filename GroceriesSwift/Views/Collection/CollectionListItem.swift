@@ -31,7 +31,7 @@ struct CollectionListItem: View {
             Text("\(collection.shoppingItems.count) items")
             
             HStack {
-                ForEach(collection.shoppingItems[0..<4], id: \.ingredient) { i in
+                ForEach(collection.topOfTheList, id: \.ingredient) { i in
                     itemTag(item: i)
                 }
                 Spacer()

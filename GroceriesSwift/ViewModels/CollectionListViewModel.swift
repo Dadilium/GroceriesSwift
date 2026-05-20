@@ -22,11 +22,14 @@ class CollectionListViewModel {
     private var modelContext: ModelContext?
     
     
-    func createNewCollection(with title: String) {
+    func createNewCollection(named title: String) -> CollectionItem {
         let collection = CollectionItem(title: title, shoppingItems: [])
         
-        collections.append(collection)
+        modelContext?.insert(collection)
         save()
+
+        collections.append(collection)        
+        return collection
     }
     
     func load(context: ModelContext) async {

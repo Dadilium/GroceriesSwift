@@ -93,8 +93,6 @@ struct ShoppingListScreen: View {
 }
 
 #Preview {
-    NavigationStack {
-        ShoppingListScreen()
-            .modelContainer(for: ShoppingItem.self)
-    }
+    ShoppingListScreen()
+        .modelContainer(for: ShoppingItem.self)
 }
