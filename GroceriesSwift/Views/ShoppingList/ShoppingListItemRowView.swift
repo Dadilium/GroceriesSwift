@@ -32,7 +32,7 @@ struct ShoppingListItemRowView: View {
             }
             .padding(4)
             
-            Text(item.ingredient)
+            Text(item.ingredient.capitalized)
                 .foregroundStyle(item.isBought ? .gray : .primary)
                 .font(.title2.weight(.medium))
                 .strikethrough(item.isBought)

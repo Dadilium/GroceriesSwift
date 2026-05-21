@@ -41,13 +41,21 @@ struct ShoppingListScreen: View {
         List {
             if viewModel.toBuyItems.count > 0 {
                 ShoppingListSection(items: viewModel.toBuyItems, setItemAsBought: viewModel.setItemAsBought, deleteItem: viewModel.deleteItem) {
-                    ShoppingListSectionHeader(dotColor: .green, title: "To Buy", count: viewModel.toBuyItems.count)
+                    ShoppingListSectionHeader(
+                        dotColor: .green,
+                        title: "To Buy",
+                        subTitle: "\(viewModel.toBuyItems.count)"
+                    )
                 }
             }
             
             if viewModel.inBasketItems.count > 0 {
                 ShoppingListSection(items: viewModel.inBasketItems, setItemAsBought: viewModel.setItemAsBought, deleteItem: viewModel.deleteItem) {
-                    ShoppingListSectionHeader(dotColor: .green.opacity(0.5), title: "In Basket", count: viewModel.inBasketItems.count)
+                    ShoppingListSectionHeader(
+                        dotColor: .green.opacity(0.5),
+                        title: "In Basket",
+                        subTitle: "\(viewModel.inBasketItems.count)"
+                    )
                 }
             }
         }

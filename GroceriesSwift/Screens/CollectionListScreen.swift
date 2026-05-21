@@ -81,5 +81,7 @@ struct CollectionListScreen: View {
 }
 
 #Preview {
-    CollectionListScreen()
+    NavigationStack {
+        CollectionListScreen()
+    }
 }

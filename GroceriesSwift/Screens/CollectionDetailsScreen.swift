@@ -15,10 +15,8 @@ struct CollectionDetailsScreen: View {
     @Query private var allCollections: [CollectionItem]
     
     init(collectionId: UUID) {
-        print(collectionId)
         self.collectionId = collectionId
         _allCollections = Query()
-        print(_allCollections)
     }
     
     private var collection: CollectionItem? {
@@ -52,15 +50,57 @@ struct CollectionDetailsScreen: View {
         } label: {
             HStack {
                 Image(systemName: "plus")
+                Text("Add all items to my list")
             }
-            .background(.green)
+            .foregroundStyle(.white)
+            .font(.title2)
+            .padding()
+            .frame(width: .infinity)
+            .background(.green, in: RoundedRectangle(cornerRadius: 16))
         }
+    }
+    
+    func ingredientItem(title: String) -> some View {
+        HStack {
+            Image(systemName: "plus")
+                .resizable()
+                .frame(width: 20, height: 20)
+                .padding(10)
+                .background(.green.opacity(0.3), in: RoundedRectangle(cornerRadius: 5))
+                .foregroundStyle(.green)
+            
+            Text(title)
+            Spacer()
+        }
+        .padding()
+        .overlay() {
+            RoundedRectangle(cornerRadius: 16)
+                .stroke(Color.gray, lineWidth: 0.2)
+        }
+        .background(.white, in: RoundedRectangle(cornerRadius: 16))
+        .shadow(radius: 10, y: 3)
     }
     
     var body: some View {
         VStack {
             header
             addAllItemsToList
+                .padding(.top)
+            
+            List {
+                Section {
+                    ForEach(collection?.shoppingItems ?? [ShoppingItem(ingredient: "my shoppin32g item")]) { item in
+                        
+                        ingredientItem(title: item.ingredient)
+                            .listRowSeparator(.hidden)
+                    }
+                } header: {
+                    ShoppingListSectionHeader(dotColor: .clear, title: "Items", subTitle: "Swipe left to remove")
+                }
+            }
+            .listStyle(.plain)
+            .scrollIndicators(.hidden)
+
             Spacer()
         }
         .padding()
@@ -69,6 +109,10 @@ struct CollectionDetailsScreen: View {
     
 }
 
-//#Preview {
-//    CollectionDetailsScreen(collectionId: UUID(from: 0 as! Decoder))
-//}
+
+#Preview {
+    let c = CollectionItem(title: "test", shoppingItems: [
+        ShoppingItem(ingredient: "my shopping item")
+    ])
+    CollectionDetailsScreen(collectionId: c.id)
+}

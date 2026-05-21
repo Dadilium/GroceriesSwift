@@ -10,14 +10,15 @@ import SwiftUI
 struct ShoppingListSectionHeader: View {
     var dotColor: Color
     var title: String
-    var count: Int
+    var subTitle: String
     
     var body: some View {
         HStack {
             Circle()
                 .fill(dotColor)
                 .frame(width: 10, height: 10)
-            Text("\(title) · \(count)")
+            Text("\(title) · \(subTitle)")
+                .font(.title3.weight(.semibold))
             Spacer()
         }
         .foregroundStyle(.secondary)
@@ -25,6 +26,6 @@ struct ShoppingListSectionHeader: View {
 }
 
 #Preview {
-    ShoppingListSectionHeader(dotColor: .green, title: "To Buy", count: 10)
-    ShoppingListSectionHeader(dotColor: .green.opacity(0.5), title: "In Basket", count: 10)
+    ShoppingListSectionHeader(dotColor: .green, title: "To Buy", subTitle: "\(10)")
+    ShoppingListSectionHeader(dotColor: .green.opacity(0.5), title: "In Basket", subTitle: "\(10)")
 }
