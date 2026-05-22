@@ -14,28 +14,6 @@ struct ShoppingListScreen: View {
     @State private var viewModel = ShoppingListViewModel()
     @State private var showingSheet = false
     @State private var showingSettings = false
-
-    private var addNewItemButton: some View {
-        Button {
-            showingSheet.toggle()
-        } label: {
-            Image(systemName: "plus")
-                .resizable()
-                .padding()
-                .frame(width: 70, height: 70)
-                .foregroundStyle(.white)
-                .background(.green, in: .circle)
-                .shadow(color: .black.opacity(0.1), radius: 5, y: 3)
-        }
-        .accessibilityLabel("Add item")
-        .padding(.bottom, 16)
-        .sheet(isPresented: $showingSheet) {
-            AddNewShoppingItemView(addItemFct: viewModel.addItem)
-                .presentationDetents([.large])
-                .presentationDragIndicator(.visible)
-                .presentationBackground(.green.opacity((0.1)))
-        }
-    }
     
     private var shoppingList: some View {
         List {
@@ -90,7 +68,15 @@ struct ShoppingListScreen: View {
                     }
                 }
                 .overlay(alignment: .bottomTrailing) {
-                    addNewItemButton
+                    AddNewShoppingItemButton {
+                        showingSheet.toggle()
+                    }
+                    .sheet(isPresented: $showingSheet) {
+                        AddNewShoppingItemView(addItemFct: viewModel.addItem)
+                            .presentationDetents([.large])
+                            .presentationDragIndicator(.visible)
+                            .presentationBackground(.green.opacity((0.1)))
+                    }
                 }
             }
         }

@@ -69,6 +69,8 @@ struct CollectionListScreen: View {
             .padding(.vertical, 4)
             
             Spacer()
+            
+//            AddNewShoppingItemView(addItemFct: { _ in })
         }
         .background(Color.green.opacity(0.1).ignoresSafeArea())
         .task {

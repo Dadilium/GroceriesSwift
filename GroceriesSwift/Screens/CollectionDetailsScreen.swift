@@ -23,6 +23,8 @@ struct CollectionDetailsScreen: View {
         return allCollections.first { $0.id == collectionId }
     }
     
+    @State private var showingSheet = false
+    
     var header: some View {
         VStack(alignment: .leading) {
             TextField("", text: Binding(
@@ -83,28 +85,44 @@ struct CollectionDetailsScreen: View {
     
     var body: some View {
         VStack {
-            header
-            addAllItemsToList
-                .padding(.top)
+            VStack {
+                header
+                addAllItemsToList
+                    .padding(.top)
+            }
+            .padding(.horizontal)
+            .padding(.top)
             
             List {
                 Section {
-                    ForEach(collection?.shoppingItems ?? [ShoppingItem(ingredient: "my shoppin32g item")]) { item in
+                    ForEach(collection?.shoppingItems ?? [ShoppingItem(ingredient: "my shoppin32g item"), ShoppingItem(ingredient: "my shoppin32g item")]) { item in
                         
                         ingredientItem(title: item.ingredient)
                             .listRowSeparator(.hidden)
+                            .listRowBackground(Color.clear)
                     }
                 } header: {
                     ShoppingListSectionHeader(dotColor: .clear, title: "Items", subTitle: "Swipe left to remove")
+                        .padding(.leading, -16)
                 }
             }
+            .listRowSpacing(-16)
             .listStyle(.plain)
             .scrollIndicators(.hidden)
-
-            Spacer()
+            
         }
-        .padding()
-        
+        .background(.green.opacity(0.1))
+        .overlay(alignment: .bottomTrailing) {
+            AddNewShoppingItemButton {
+                showingSheet.toggle()
+            }
+            .sheet(isPresented: $showingSheet) {
+                AddNewShoppingItemView(addItemFct: viewModel.addItem)
+                    .presentationDetents([.large])
+                    .presentationDragIndicator(.visible)
+                    .presentationBackground(.green.opacity((0.1)))
+            }
+        }
     }
     
 }
