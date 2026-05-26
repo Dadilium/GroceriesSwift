@@ -9,9 +9,11 @@ import SwiftUI
 import SwiftData
 
 struct CollectionDetailsScreen: View {
+    @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     var collectionId: UUID
     
+    @State private var viewModel = CollectionDetailsViewModel()
     @Query private var allCollections: [CollectionItem]
     
     init(collectionId: UUID) {
@@ -22,8 +24,6 @@ struct CollectionDetailsScreen: View {
     private var collection: CollectionItem? {
         return allCollections.first { $0.id == collectionId }
     }
-    
-    @State private var showingSheet = false
     
     var header: some View {
         VStack(alignment: .leading) {
@@ -48,7 +48,7 @@ struct CollectionDetailsScreen: View {
     
     var addAllItemsToList: some View {
         Button {
-            
+            viewModel.addAllItemToShoppingList(context: modelContext)
         } label: {
             HStack {
                 Image(systemName: "plus")
@@ -57,7 +57,7 @@ struct CollectionDetailsScreen: View {
             .foregroundStyle(.white)
             .font(.title2)
             .padding()
-            .frame(width: .infinity)
+            .frame(maxWidth: .infinity)
             .background(.green, in: RoundedRectangle(cornerRadius: 16))
         }
     }
@@ -114,14 +114,17 @@ struct CollectionDetailsScreen: View {
         .background(.green.opacity(0.1))
         .overlay(alignment: .bottomTrailing) {
             AddNewShoppingItemButton {
-                showingSheet.toggle()
+                viewModel.showingSheet.toggle()
             }
-            .sheet(isPresented: $showingSheet) {
-                AddNewShoppingItemView(addItemFct: viewModel.addItem)
+            .sheet(isPresented: $viewModel.showingSheet) {
+                AddNewShoppingItemView(addItemFct: { _ in })
                     .presentationDetents([.large])
                     .presentationDragIndicator(.visible)
                     .presentationBackground(.green.opacity((0.1)))
             }
+        }
+        .task {
+            await viewModel.load(context: modelContext)
         }
     }
     
