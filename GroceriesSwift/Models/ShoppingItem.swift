@@ -8,8 +8,7 @@
 import SwiftData
 import Foundation
 
-@Model
-class ShoppingItem {
+struct ShoppingItem: Identifiable, Codable {
     var id: UUID
     var ingredient: String
     var isBought: Bool

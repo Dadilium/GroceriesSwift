@@ -19,7 +19,7 @@ class CollectionListViewModel {
     var state: CollectionListState = .loading
     var collections: [CollectionItem] = []
     
-    private var modelContext: ModelContext?
+    private var modelContext: ModelContext!
     
     
     func createNewCollection(named title: String) -> CollectionItem {
@@ -42,6 +42,6 @@ class CollectionListViewModel {
     }
     
     func save() {
-        try? self.modelContext?.save()
+        try? modelContext.save()
     }
 }

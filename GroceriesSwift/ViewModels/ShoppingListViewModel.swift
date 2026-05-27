@@ -10,7 +10,7 @@ import SwiftData
 
 enum ShoppingListState: Equatable {
     case loading
-    case ready
+    case ready(GroceryList)
     case error
 }
 
@@ -18,61 +18,77 @@ enum ShoppingListState: Equatable {
 @MainActor
 class ShoppingListViewModel {
     var state: ShoppingListState = .loading
-    var items: [ShoppingItem] = []
     
-    private var modelContext: ModelContext?
+    private var modelContext: ModelContext!
     
     var toBuyItems: [ShoppingItem] {
-        items.filter { !$0.isBought }
+        guard case .ready(let list) = state else { return [] }
+        return list.items.filter { !$0.isBought }
     }
     var inBasketItems: [ShoppingItem] {
-        items.filter { $0.isBought }
+        guard case .ready(let list) = state else { return [] }
+        return list.items.filter { $0.isBought }
+    }
+    var itemCount: Int {
+        guard case .ready(let list) = state else { return 0 }
+        return list.items.count
     }
     
     func addItem(ingredientName: String) {
-        guard let modelContext else { return }
+//        guard let modelContext else { return }
+        guard case .ready(let list) = state else { return }
+
         let itemToCreate = ShoppingItem(ingredient: ingredientName)
         
-        modelContext.insert(itemToCreate)
-        items.append(itemToCreate)
-        items.sort(by: { $0.ingredient.localizedCaseInsensitiveCompare($1.ingredient) == .orderedAscending })
+//        modelContext.insert(itemToCreate)
+        list.items.append(itemToCreate)
+        list.items.sort(by: { $0.ingredient.localizedCaseInsensitiveCompare($1.ingredient) == .orderedAscending })
         save()
     }
     
     func setItemAsBought(id: UUID) {
-        guard let index = items.firstIndex(where: { $0.id == id }) else { return }
-        items[index].isBought.toggle()
+        guard case .ready(let list) = state else { return }
+        guard let index = list.items.firstIndex(where: { $0.id == id }) else { return }
+
+        list.items[index].isBought.toggle()
         save()
     }
 
     func deleteItem(id: UUID) {
-        guard let modelContext, let item = items.first(where: { $0.id == id }) else { return }
+        guard case .ready(let list) = state else { return }
+//        guard let modelContext, let item = groceryList?.list.first(where: { $0.id == id }) else { return }
         withAnimation {
-            modelContext.delete(item)
-            items.removeAll { $0.id == id }
+//            modelContext.delete(item)
+            list.items.removeAll { $0.id == id }
         }
         save()
     }
     
     func clearAll() {
-        guard let modelContext else { return }
+//        guard let modelContext else { return }
+        guard case .ready(let list) = state else { return }
 
-        items.forEach({ item in modelContext.delete(item) })
-        items.removeAll()
+        list.items.removeAll()
+//        items.forEach({ item in modelContext.delete(item) })
         save()
     }
     
     func load(context: ModelContext) async {
         self.modelContext = context
-        let descriptor = FetchDescriptor<ShoppingItem>(
-            sortBy: [SortDescriptor(\.ingredient)]
-        )
         
-        self.items = (try? context.fetch(descriptor)) ?? []
-        state = .ready
+        do {
+            guard let result = try context.fetch(FetchDescriptor<GroceryList>()).first else {
+                state = .error
+                return
+            }
+            
+            state = .ready(result)
+        } catch {
+            state = .error
+        }
     }
     
     private func save() {
-        try? modelContext?.save()
+        try? modelContext.save()
     }
 }

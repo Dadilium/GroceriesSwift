@@ -16,7 +16,7 @@ struct SettingsScreen: View {
     var body: some View {
         List {
             Section("Data") {
-                SettingsRow(title: "Items in basket", subtitle: "\(viewModel.inBasketItems.count) of \(viewModel.items.count)", icon: "clock", state: .base)
+                SettingsRow(title: "Items in basket", subtitle: "\(viewModel.inBasketItems.count) of \(viewModel.itemCount)", icon: "clock", state: .base)
                     .alignmentGuide(.listRowSeparatorLeading) { _ in 0 }
                 SettingsRow(title: "Clear all items", icon: "checkmark", state: .complete) { showingAlert = true }
             }

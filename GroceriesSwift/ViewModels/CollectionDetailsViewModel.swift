@@ -14,7 +14,7 @@ class CollectionDetailsViewModel {
     var showingSheet = false
     
     var collection: CollectionItem?
-    private(set) var currentShoppingList: [ShoppingItem] = []
+    private(set) var currentShoppingList: GroceryList?
     
     init(collection: CollectionItem? = nil) {
         self.collection = collection
@@ -22,16 +22,15 @@ class CollectionDetailsViewModel {
     
     func addAllItemToShoppingList(context: ModelContext) {
         // Merge items, avoiding duplicates by ingredient
-
-        guard let items = collection?.shoppingItems else { return }
+        guard let items = collection?.shoppingItems, let listItems = currentShoppingList?.items else { return }
+        
         for item in items {
-            let foundItem = currentShoppingList.first { existing in
+            let foundItem = listItems.first { existing in
                 existing.ingredient == item.ingredient
             }
             
             if foundItem == nil {
-                context.insert(ShoppingItem(ingredient: item.ingredient))
-                currentShoppingList.append(item)
+                currentShoppingList?.items.append(item)
             }
         }
         
@@ -52,8 +51,8 @@ class CollectionDetailsViewModel {
  
     func load(context: ModelContext) async {
         do {
-            let descriptor = FetchDescriptor<ShoppingItem>(sortBy: [SortDescriptor(\ShoppingItem.ingredient)])
-            currentShoppingList = try context.fetch(descriptor)
+            let descriptor = FetchDescriptor<GroceryList>()
+            currentShoppingList = try context.fetch(descriptor).first
         } catch {
             // In case of fetch failure, keep the current list unchanged
             #if DEBUG

@@ -46,7 +46,7 @@ struct ShoppingListScreen: View {
     
     var body: some View {
         VStack {
-            ShoppingListHeaderView(totalCount: viewModel.items.count, boughtCount: viewModel.inBasketItems.count, onSettingsPressed: { showingSettings = true }
+            ShoppingListHeaderView(totalCount: viewModel.itemCount, boughtCount: viewModel.inBasketItems.count, onSettingsPressed: { showingSettings = true }
             )
             .navigationDestination(isPresented: $showingSettings) {
                 SettingsScreen(viewModel: viewModel)
@@ -59,9 +59,9 @@ struct ShoppingListScreen: View {
             case .error:
                 ProgressView()
 
-            case .ready:
+            case .ready(let groceryList):
                 Group {
-                    if viewModel.items.isEmpty {
+                    if groceryList.items.isEmpty {
                         EmptyShoppingListView()
                     } else {
                         shoppingList
@@ -88,5 +88,5 @@ struct ShoppingListScreen: View {
 
 #Preview {
     ShoppingListScreen()
-        .modelContainer(for: ShoppingItem.self)
+        .modelContainer(for: GroceryList.self)
 }
