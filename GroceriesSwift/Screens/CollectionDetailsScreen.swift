@@ -48,7 +48,7 @@ struct CollectionDetailsScreen: View {
     
     var addAllItemsToList: some View {
         Button {
-            viewModel.addAllItemToShoppingList(context: modelContext)
+            viewModel.addAllItemToShoppingList(context: modelContext, collection: collection)
         } label: {
             HStack {
                 Image(systemName: "plus")
@@ -117,7 +117,7 @@ struct CollectionDetailsScreen: View {
                 viewModel.showingSheet.toggle()
             }
             .sheet(isPresented: $viewModel.showingSheet) {
-                AddNewShoppingItemView(addItemFct: { _ in })
+                AddNewShoppingItemView(addItemFct: { ingredient in viewModel.addItemToCollection(context: modelContext, collection: collection, newIngredient: ingredient) })
                     .presentationDetents([.large])
                     .presentationDragIndicator(.visible)
                     .presentationBackground(.green.opacity((0.1)))

@@ -12,6 +12,7 @@ struct AddNewShoppingItemView: View {
     
     @Environment(\.dismiss) private var dismiss
     @State private var itemName: String = ""
+    @State private var showTick: Bool = false
     @FocusState private var isNameFocused: Bool
     
     private var inputCard: some View {
@@ -40,24 +41,40 @@ struct AddNewShoppingItemView: View {
             RoundedRectangle(cornerRadius: 20)
                 .stroke(.green.opacity(0.3), lineWidth: 10)
         }
+        .overlay(alignment: .bottomTrailing) {
+            Image(systemName: "checkmark.circle.fill")
+                .resizable()
+                .frame(width: 50, height: 50)
+                .foregroundStyle(.green)
+                .padding(.trailing)
+                .padding(.bottom)
+                .scaleEffect(showTick ? 1 : 0.3)
+                .opacity(showTick ? 1 : 0)
+                .animation(.spring(duration: 0.5), value: showTick)
+        }
     }
     
     private var addButton: some View {
         Button {
-                addItemFct(itemName)
-                dismiss()
-            } label: {
-                Text("Add")
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(itemName.isEmpty ? .gray : .green, in: RoundedRectangle(cornerRadius: 16))
-                    .foregroundStyle(.white)
-                    .font(.headline)
-                    .contentShape(RoundedRectangle(cornerRadius: 16))
+            addItemFct(itemName)
+            showTick = true
+            itemName = ""
+            Task {
+                try? await Task.sleep(for: .seconds(2.5))
+                showTick = false
             }
-            .disabled(itemName.isEmpty)
-            .padding(.top)
-            .shadow(radius: 10, y: 3)
+        } label: {
+            Text("Add")
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(itemName.isEmpty ? .gray : .green, in: RoundedRectangle(cornerRadius: 16))
+                .foregroundStyle(.white)
+                .font(.headline)
+                .contentShape(RoundedRectangle(cornerRadius: 16))
+        }
+        .disabled(itemName.isEmpty)
+        .padding(.top)
+        .shadow(radius: 10, y: 3)
     }
     
     var body: some View {
@@ -69,7 +86,7 @@ struct AddNewShoppingItemView: View {
                 Button {
                     dismiss()
                 } label: {
-                    Text("Cancel")
+                    Text("Done")
                         .font(.title3)
                         .foregroundStyle(.gray)
                 }

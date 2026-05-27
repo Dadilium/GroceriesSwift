@@ -28,5 +28,6 @@ struct AddNewShoppingItemButton: View {
         }
         .accessibilityLabel("Add item")
         .padding(.bottom, 16)
+        .padding(.trailing)
     }
 }

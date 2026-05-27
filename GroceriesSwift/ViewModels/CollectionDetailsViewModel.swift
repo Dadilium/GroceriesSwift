@@ -13,14 +13,9 @@ import SwiftUI
 class CollectionDetailsViewModel {
     var showingSheet = false
     
-    var collection: CollectionItem?
     private(set) var currentShoppingList: GroceryList?
     
-    init(collection: CollectionItem? = nil) {
-        self.collection = collection
-    }
-    
-    func addAllItemToShoppingList(context: ModelContext) {
+    func addAllItemToShoppingList(context: ModelContext, collection: CollectionItem?) {
         // Merge items, avoiding duplicates by ingredient
         guard let items = collection?.shoppingItems, let listItems = currentShoppingList?.items else { return }
         
@@ -37,15 +32,11 @@ class CollectionDetailsViewModel {
         save(context: context)
     }
     
-    func addItemToCollection(context: ModelContext, newItem: ShoppingItem) {
-        if collection?.shoppingItems.contains(where: { $0.ingredient == newItem.ingredient }) == true { return }
+    func addItemToCollection(context: ModelContext, collection: CollectionItem?, newIngredient: String) {
+        guard let collection else { return }
+        if collection.shoppingItems.contains(where: { $0.ingredient == newIngredient }) == true { return }
 
-        collection?.shoppingItems.append(newItem)
-        save(context: context)
-    }
-    
-    func updateCollectionName(context: ModelContext, newName: String) {
-        collection?.title = newName
+        collection.shoppingItems.append(ShoppingItem(ingredient: newIngredient))
         save(context: context)
     }
  

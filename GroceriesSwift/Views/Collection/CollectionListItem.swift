@@ -25,7 +25,7 @@ struct CollectionListItem: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text("Title")
+            Text(collection.title)
                 .font(.title2.weight(.semibold))
             
             Text("\(collection.shoppingItems.count) items")
@@ -37,12 +37,14 @@ struct CollectionListItem: View {
                 Spacer()
             }
             
-            Text("+ \(collection.shoppingItems.count) more")
-                .foregroundStyle(.secondary)
+            if collection.shoppingItems.count > collection.topOfTheList.count {
+                Text("+ \(collection.shoppingItems.count) more")
+                    .foregroundStyle(.secondary)
+            }
         }
         .padding()
         .padding(.vertical)
-        .frame(width: .infinity)
+        .frame(maxWidth: .infinity)
         .background(.white, in: RoundedRectangle(cornerRadius: 16))
         .overlay(alignment: .topTrailing) {
             Image(systemName: "chevron.right")
@@ -54,8 +56,8 @@ struct CollectionListItem: View {
                 .padding(.trailing, -16)
                 .padding(.top, -16)
         }
-        .clipShape(RoundedRectangle(cornerRadius: 16))
         .shadow(radius: 10, y: 3)
+        .clipShape(RoundedRectangle(cornerRadius: 16))
     }
 }
 

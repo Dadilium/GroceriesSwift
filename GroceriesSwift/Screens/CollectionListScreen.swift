@@ -62,15 +62,18 @@ struct CollectionListScreen: View {
             
             ScrollView {
                 ForEach(viewModel.collections) { item in
-                    CollectionListItem(collection: item)
+                    Button {
+                        collectionRoute = CollectionRoute(id: item.id)
+                    } label: {
+                        CollectionListItem(collection: item)
+                    }
+                    .buttonStyle(.plain)
                 }
             }
             .padding(.horizontal)
             .padding(.vertical, 4)
             
             Spacer()
-            
-//            AddNewShoppingItemView(addItemFct: { _ in })
         }
         .background(Color.green.opacity(0.1).ignoresSafeArea())
         .task {
