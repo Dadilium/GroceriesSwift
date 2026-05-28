@@ -15,20 +15,31 @@ class CollectionDetailsViewModel {
     
     private(set) var currentShoppingList: GroceryList?
     
+    private func addItemToShoppingListIfNew(list: [ShoppingItem], newItem: ShoppingItem) {
+        let foundItem = list.first { existing in
+            existing.ingredient == newItem.ingredient
+        }
+        
+        if foundItem == nil {
+            currentShoppingList?.items.append(newItem)
+        }
+    }
+    
     func addAllItemToShoppingList(context: ModelContext, collection: CollectionItem?) {
         // Merge items, avoiding duplicates by ingredient
         guard let items = collection?.shoppingItems, let listItems = currentShoppingList?.items else { return }
         
         for item in items {
-            let foundItem = listItems.first { existing in
-                existing.ingredient == item.ingredient
-            }
-            
-            if foundItem == nil {
-                currentShoppingList?.items.append(item)
-            }
+            addItemToShoppingListIfNew(list: listItems, newItem: item)
         }
         
+        save(context: context)
+    }
+    
+    func addItemToShoppingList(context: ModelContext, newShoppingItem: ShoppingItem) {
+        guard let listItems = currentShoppingList?.items else { return }
+        
+        addItemToShoppingListIfNew(list: listItems, newItem: newShoppingItem)
         save(context: context)
     }
     

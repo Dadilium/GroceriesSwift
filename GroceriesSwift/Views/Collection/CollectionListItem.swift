@@ -38,7 +38,7 @@ struct CollectionListItem: View {
             }
             
             if collection.shoppingItems.count > collection.topOfTheList.count {
-                Text("+ \(collection.shoppingItems.count) more")
+                Text("+\(collection.shoppingItems.count - collection.topOfTheList.count) more")
                     .foregroundStyle(.secondary)
             }
         }
@@ -52,7 +52,7 @@ struct CollectionListItem: View {
                 .frame(width: 10, height: 15)
                 .foregroundStyle(.gray)
                 .padding(40)
-                .background(.red.opacity(0.2), in: Circle())
+                .background(collection.color.opacity(0.2), in: Circle())
                 .padding(.trailing, -16)
                 .padding(.top, -16)
         }
@@ -65,6 +65,8 @@ struct CollectionListItem: View {
     CollectionListItem(collection: CollectionItem(title: "Super List", shoppingItems: [
         ShoppingItem(ingredient: "Milk"),
         ShoppingItem(ingredient: "Tomatoes"),
+        ShoppingItem(ingredient: "butter"),
+        ShoppingItem(ingredient: "Dragon fruit"),
         ShoppingItem(ingredient: "butter"),
         ShoppingItem(ingredient: "Dragon fruit"),
     ]))

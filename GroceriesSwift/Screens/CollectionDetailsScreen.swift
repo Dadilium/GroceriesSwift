@@ -62,53 +62,56 @@ struct CollectionDetailsScreen: View {
         }
     }
     
-    func ingredientItem(title: String) -> some View {
-        HStack {
-            Image(systemName: "plus")
-                .resizable()
-                .frame(width: 20, height: 20)
-                .padding(10)
-                .background(.green.opacity(0.3), in: RoundedRectangle(cornerRadius: 5))
-                .foregroundStyle(.green)
-            
-            Text(title)
+    var emptyItemList: some View {
+        VStack(alignment: .center) {
+            Spacer()
+            Text("Add shopping items to your list")
             Spacer()
         }
-        .padding()
-        .overlay() {
-            RoundedRectangle(cornerRadius: 16)
-                .stroke(Color.gray, lineWidth: 0.2)
-        }
-        .background(.white, in: RoundedRectangle(cornerRadius: 16))
-        .shadow(radius: 10, y: 3)
     }
     
+    var populatedItemList: some View {
+        List {
+            Section {
+                ForEach(collection?.shoppingItems ?? [ShoppingItem(ingredient: "my shoppin32g item"), ShoppingItem(ingredient: "my shoppin32g item")]) { item in
+                    
+                    CollectionDetailsIngredientRow(title: item.ingredient) {
+                        viewModel.addItemToShoppingList(context: modelContext, newShoppingItem: item)
+                    }
+                    .listRowSeparator(.hidden)
+                    .listRowBackground(Color.clear)
+                }
+            } header: {
+                ShoppingListSectionHeader(dotColor: .clear, title: "Items", subTitle: "Swipe left to remove")
+                    .padding(.leading, -16)
+            }
+        }
+        
+    }
+        
     var body: some View {
         VStack {
             VStack {
                 header
-                addAllItemsToList
-                    .padding(.top)
+                
+                if collection?.shoppingItems.count ?? 0 > 0 {
+                    addAllItemsToList
+                        .padding(.top)
+                }
             }
             .padding(.horizontal)
             .padding(.top)
             
-            List {
-                Section {
-                    ForEach(collection?.shoppingItems ?? [ShoppingItem(ingredient: "my shoppin32g item"), ShoppingItem(ingredient: "my shoppin32g item")]) { item in
-                        
-                        ingredientItem(title: item.ingredient)
-                            .listRowSeparator(.hidden)
-                            .listRowBackground(Color.clear)
-                    }
-                } header: {
-                    ShoppingListSectionHeader(dotColor: .clear, title: "Items", subTitle: "Swipe left to remove")
-                        .padding(.leading, -16)
-                }
+            
+            if collection?.shoppingItems.count ?? 0 > 0 {
+                populatedItemList
+                    .listRowSpacing(-16)
+                    .listStyle(.plain)
+                    .scrollIndicators(.hidden)
+            } else {
+                emptyItemList
             }
-            .listRowSpacing(-16)
-            .listStyle(.plain)
-            .scrollIndicators(.hidden)
+            Spacer()
             
         }
         .background(.green.opacity(0.1))
