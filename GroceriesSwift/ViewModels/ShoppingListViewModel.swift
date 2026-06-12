@@ -35,12 +35,10 @@ class ShoppingListViewModel {
     }
     
     func addItem(ingredientName: String) {
-//        guard let modelContext else { return }
         guard case .ready(let list) = state else { return }
 
         let itemToCreate = ShoppingItem(ingredient: ingredientName)
         
-//        modelContext.insert(itemToCreate)
         list.items.append(itemToCreate)
         list.items.sort(by: { $0.ingredient.localizedCaseInsensitiveCompare($1.ingredient) == .orderedAscending })
         save()
@@ -56,20 +54,10 @@ class ShoppingListViewModel {
 
     func deleteItem(id: UUID) {
         guard case .ready(let list) = state else { return }
-//        guard let modelContext, let item = groceryList?.list.first(where: { $0.id == id }) else { return }
+
         withAnimation {
-//            modelContext.delete(item)
             list.items.removeAll { $0.id == id }
         }
-        save()
-    }
-    
-    func clearAll() {
-//        guard let modelContext else { return }
-        guard case .ready(let list) = state else { return }
-
-        list.items.removeAll()
-//        items.forEach({ item in modelContext.delete(item) })
         save()
     }
     

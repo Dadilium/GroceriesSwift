@@ -50,6 +50,15 @@ class CollectionDetailsViewModel {
         collection.shoppingItems.append(ShoppingItem(ingredient: newIngredient))
         save(context: context)
     }
+    
+    func deleteItem(context: ModelContext, collection: CollectionItem?, id: UUID) {
+        guard let collection else { return }
+
+        withAnimation {
+            collection.shoppingItems.removeAll { $0.id == id }
+        }
+        try? context.save()
+    }
  
     func load(context: ModelContext) async {
         do {

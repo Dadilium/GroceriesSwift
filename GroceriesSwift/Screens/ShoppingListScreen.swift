@@ -46,11 +46,8 @@ struct ShoppingListScreen: View {
     
     var body: some View {
         VStack {
-            ShoppingListHeaderView(totalCount: viewModel.itemCount, boughtCount: viewModel.inBasketItems.count, onSettingsPressed: { showingSettings = true }
+            ShoppingListHeaderView(totalCount: viewModel.itemCount, boughtCount: viewModel.inBasketItems.count
             )
-            .navigationDestination(isPresented: $showingSettings) {
-                SettingsScreen(viewModel: viewModel)
-            }
             
             switch viewModel.state {
             case .loading:

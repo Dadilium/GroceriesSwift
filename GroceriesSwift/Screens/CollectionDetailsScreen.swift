@@ -73,13 +73,23 @@ struct CollectionDetailsScreen: View {
     var populatedItemList: some View {
         List {
             Section {
-                ForEach(collection?.shoppingItems ?? [ShoppingItem(ingredient: "my shoppin32g item"), ShoppingItem(ingredient: "my shoppin32g item")]) { item in
+                ForEach(collection?.shoppingItems ?? []) { item in
+                    let alreadyAdded = viewModel.currentShoppingList?.items
+                        .contains(where: { $0.ingredient == item.ingredient }) ?? false
                     
-                    CollectionDetailsIngredientRow(title: item.ingredient) {
+                    CollectionDetailsIngredientRow(title: item.ingredient, isAdded: alreadyAdded) {
                         viewModel.addItemToShoppingList(context: modelContext, newShoppingItem: item)
                     }
                     .listRowSeparator(.hidden)
                     .listRowBackground(Color.clear)
+                    .swipeActions() {
+                        Button(role: .destructive) {
+                            viewModel.deleteItem(context: modelContext, collection: collection, id: item.id)
+                        } label: {
+                            Image(systemName: "xmark.bin.fill")
+                                .symbolEffect(.drawOn)
+                        }
+                    }
                 }
             } header: {
                 ShoppingListSectionHeader(dotColor: .clear, title: "Items", subTitle: "Swipe left to remove")

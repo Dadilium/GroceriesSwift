@@ -9,12 +9,12 @@ import SwiftUI
 
 struct CollectionDetailsIngredientRow: View {
     var title: String
+    var isAdded: Bool
     var onPress: () -> Void
 
-    @State private var isAdded: Bool = false
-
-    init(title: String, onPress: @escaping () -> Void) {
+    init(title: String, isAdded: Bool, onPress: @escaping () -> Void) {
         self.title = title
+        self.isAdded = isAdded
         self.onPress = onPress
     }
     
@@ -22,7 +22,6 @@ struct CollectionDetailsIngredientRow: View {
         HStack {
             Button {
                 onPress()
-                isAdded = true
             } label: {
                 Image(systemName: isAdded ? "checkmark" : "plus")
                     .resizable()

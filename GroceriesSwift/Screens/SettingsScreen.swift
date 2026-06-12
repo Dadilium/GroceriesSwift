@@ -6,14 +6,16 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct SettingsScreen: View {
-    @Environment(\.dismiss) var dismiss
+    @Binding var selectedTab: Int
+    @Environment(\.modelContext) private var modelContext
     
-    var viewModel: ShoppingListViewModel
+    var viewModel = SettingsViewModel()
     @State var showingAlert: Bool = false
     
-    var body: some View {
+    private func settingsContent(groceryList: GroceryList) -> some View {
         List {
             Section("Data") {
                 SettingsRow(title: "Items in basket", subtitle: "\(viewModel.inBasketItems.count) of \(viewModel.itemCount)", icon: "clock", state: .base)
@@ -32,16 +34,30 @@ struct SettingsScreen: View {
             isPresented: $showingAlert,
         ) {
             Button("Clear all", role: .destructive) {
-                viewModel.clearAll()
-                dismiss()
+                viewModel.clearAll(context: modelContext)
+                selectedTab = 0
             }
             Button("Cancel", role: .cancel) {}
         } message: {
             Text("This action is going to remove all the items you added in your list. Make sure you are done with your groceries first.")
         }
     }
+    
+    var body: some View {
+        Group {
+            switch viewModel.state {
+            case .error, .loading:
+                ProgressView()
+            case .ready(let groceryList):
+                settingsContent(groceryList: groceryList)
+            }
+        }
+        .task {
+            await viewModel.load(context: modelContext)
+        }
+    }
 }
 
 #Preview {
-    SettingsScreen(viewModel: ShoppingListViewModel())
+    SettingsScreen(selectedTab: .constant(0))
 }

@@ -51,14 +51,6 @@ struct ShoppingListItemRowView: View {
                 .stroke(.gray, lineWidth: 1)
         }
         .swipeActions() {
-            Button(role: .confirm) {
-                onItemPressed(item.id)
-            } label: {
-                Image(systemName: "checkmark")
-                    .symbolEffect(.drawOn)
-            }
-        }
-        .swipeActions() {
             Button(role: .destructive) {
                 onItemDeleted(item.id)
             } label: {
